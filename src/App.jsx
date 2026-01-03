@@ -1,24 +1,41 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Team from './pages/Team';
-import SplashScreen from './components/SplashScreen';
-import './styles/theme.css';
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Team from "./pages/Team";
+import Events from "./pages/Events";
+import SplashScreen from "./components/SplashScreen";
+import Footer from "./components/Footer";
+import NeonCursor from "./components/NeonCursor";
+import GlitterCursor from "./components/GlitterCursor";
+import Mentorship from "./pages/mentorship";
+import "./styles/theme.css";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
 
+  // Show splash screen first
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 
+  // Main app after splash
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/team" element={<Team />} />
-      </Routes>
-    </Router>
+    <>
+      <NeonCursor />
+      <GlitterCursor />
+
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/mentorship" element={<Mentorship />} />
+        </Routes>
+
+        <Footer />
+      </Router>
+    </>
   );
 }
 

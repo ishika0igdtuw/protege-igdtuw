@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
 import './Home.css';
+import ProtegeSection from '../components/ProtegeSection';
+
 
 import heartIcon from '../assets/3dicons-notify-heart-front-color.png';
 import girlIcon from '../assets/3dicons-girl-front-color.png';
 import targetIcon from '../assets/3dicons-target-front-color.png';
+import mentorsIcon from '../assets/mentors_3d.png';
 import teamVideo from '../assets/team_video.mp4';
 
 const Home = () => {
@@ -92,24 +95,34 @@ const Home = () => {
 
       {/* Stats Section */}
       <section className="stats">
-        <div className="stat">
+        <div className="stat" style={{animationDelay: '0.1s'}}>
           <img src={heartIcon} alt="Social Reach" className="stat-icon" />
           <h2 className="number" data-target="15000" data-has-plus="true">0</h2>
           <p>Social Reach</p>
         </div>
 
-        <div className="stat">
+        <div className="stat" style={{animationDelay: '0.3s'}}>
           <img src={girlIcon} alt="Students" className="stat-icon" />
           <h2 className="number" data-target="5000" data-has-plus="true">0</h2>
           <p>Students</p>
         </div>
 
-        <div className="stat">
+        <div className="stat" style={{animationDelay: '0.5s'}}>
           <img src={targetIcon} alt="Competitions" className="stat-icon" />
           <h2 className="number" data-target="15" data-has-plus="true">0</h2>
           <p>Competitions</p>
         </div>
+
+        <div className="stat" style={{animationDelay: '0.7s'}}>
+          <img src={mentorsIcon} alt="Mentors & Alumni" className="stat-icon" />
+          <h2 className="number" data-target="100" data-has-plus="true">0</h2>
+          <p>Mentors & Alumni</p>
+        </div>
       </section>
+
+      {/* Protege Section */}
+      <ProtegeSection />
+      
     </>
   );
 };

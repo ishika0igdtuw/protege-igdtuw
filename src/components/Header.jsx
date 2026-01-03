@@ -10,10 +10,9 @@ const Header = () => {
       
       <nav className="nav">
         <Link to="/">Home</Link>
-        <a href="#">About</a>
         <Link to="/team">Team</Link> 
-        <a href="#">Events</a>
-        <a href="#">Mentorship</a>
+        <Link to="/events">Events</Link>
+        <Link to="/mentorship">Mentorship</Link>
         <a href="#">Blogs</a>
         <a href="#">FAQs</a>
       </nav>
