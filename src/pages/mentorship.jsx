@@ -114,26 +114,40 @@ const handleSplashComplete = () => {
     };
   }, []);
 
-  // Mouse position tracking for parallax effect
+  // Mouse position tracking for parallax effect - THROTTLED
   useEffect(() => {
+    let ticking = false;
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20
-      });
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setMousePosition({
+            x: (e.clientX / window.innerWidth - 0.5) * 10, // Reduced from 20
+            y: (e.clientY / window.innerHeight - 0.5) * 10
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Scroll progress
+  // Scroll progress - THROTTLED
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = (window.scrollY / totalHeight) * 100;
+          setScrollProgress(progress);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -157,11 +171,11 @@ const handleSplashComplete = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Continuous testimonial scroll
+  // Optimized testimonial scroll - REDUCED FREQUENCY
   useEffect(() => {
     const scrollInterval = setInterval(() => {
-      setTestimonialOffset(prev => prev + 4);
-    }, 25);
+      setTestimonialOffset(prev => prev + 2); // Reduced from 4
+    }, 50); // Reduced from 25ms
 
     return () => clearInterval(scrollInterval);
   }, []);
@@ -226,7 +240,7 @@ const handleSplashComplete = () => {
     }, 50);
   };
 
-  // Particle effect
+  // Simplified Particle effect - REDUCED PARTICLES
   const ParticleBackground = () => {
     const canvasRef = useRef(null);
 
@@ -237,18 +251,19 @@ const handleSplashComplete = () => {
       canvas.height = window.innerHeight;
 
       const particles = [];
-      const particleCount = 50;
+      const particleCount = 20; // Reduced from 50
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          radius: Math.random() * 2 + 1
+          vx: (Math.random() - 0.5) * 0.3, // Reduced speed
+          vy: (Math.random() - 0.5) * 0.3,
+          radius: Math.random() * 1.5 + 0.5 // Smaller particles
         });
       }
 
+      let animationId;
       const animate = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#20B2AA';
@@ -265,25 +280,28 @@ const handleSplashComplete = () => {
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
 
-          particles.forEach((p2, j) => {
-            if (i !== j) {
-              const dx = p.x - p2.x;
-              const dy = p.y - p2.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
+          // Reduced connection calculations
+          if (i % 2 === 0) { // Only check every other particle
+            particles.forEach((p2, j) => {
+              if (i !== j && j > i) { // Avoid duplicate checks
+                const dx = p.x - p2.x;
+                const dy = p.y - p2.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
 
-              if (dist < 120) {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.globalAlpha = 1 - dist / 120;
-                ctx.stroke();
-                ctx.globalAlpha = 1;
+                if (dist < 100) { // Reduced from 120
+                  ctx.beginPath();
+                  ctx.moveTo(p.x, p.y);
+                  ctx.lineTo(p2.x, p2.y);
+                  ctx.globalAlpha = 1 - dist / 100;
+                  ctx.stroke();
+                  ctx.globalAlpha = 1;
+                }
               }
-            }
-          });
+            });
+          }
         });
 
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
       };
 
       animate();
@@ -293,7 +311,10 @@ const handleSplashComplete = () => {
         canvas.height = window.innerHeight;
       };
       window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        cancelAnimationFrame(animationId);
+      };
     }, []);
 
     return <canvas ref={canvasRef} className="particle-canvas" />;
@@ -327,7 +348,7 @@ const handleSplashComplete = () => {
         <ParticleBackground />
 
         <div className="hero-content" style={{
-          transform: `translate(${mousePosition.x}px, ${mousePosition.y}px)`
+          transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)` // Reduced effect
         }}>
           <div className="sparkle-container">
             <Sparkles className="sparkle-icon sparkle-1" size={24} />
@@ -608,14 +629,16 @@ const handleSplashComplete = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          opacity: 0.3;
+          opacity: 0.2;
+          will-change: auto;
         }
 
         .hero-content {
           text-align: center;
           z-index: 10;
           animation: fadeInUp 1s ease;
-          transition: transform 0.1s ease-out;
+          transition: transform 0.2s ease-out;
+          will-change: transform;
         }
 
         .sparkle-container {
@@ -654,7 +677,7 @@ const handleSplashComplete = () => {
 
         @keyframes sparkle {
           0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-          50% { opacity: 1; transform: scale(1) rotate(180deg); }
+          50% { opacity: 0.8; transform: scale(1) rotate(180deg); }
         }
 
         .hero-stats-below {
@@ -1285,7 +1308,8 @@ const handleSplashComplete = () => {
           display: flex;
           flex-direction: column;
           gap: 2rem;
-          transition: transform 0.05s linear;
+          transition: transform 0.1s linear;
+          will-change: transform;
         }
 
         .testimonial-card-slide {
@@ -1468,6 +1492,10 @@ const handleSplashComplete = () => {
 }
         /* Responsive */
         @media (max-width: 768px) {
+          .particle-canvas {
+            display: none; /* Disable particles on mobile */
+          }
+
           .sparkle-container {
             display: none;
           }

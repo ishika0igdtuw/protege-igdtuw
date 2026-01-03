@@ -83,8 +83,8 @@ function Footer() {
               <h4>Location</h4>
             </div>
             
-            <div className="location-card-with-map">
-              {/* Map Image Container */}
+            <div className="location-section">
+              {/* Map Image */}
               <div className="map-container">
                 <img 
                   src="MapImage.png"
@@ -93,8 +93,8 @@ function Footer() {
                 />
               </div>
 
-              {/* Location Details */}
-              <div className="location-details-box">
+              {/* Location Details - directly attached */}
+              <div className="location-details">
                 <h5>Indira Gandhi Delhi Technical University for Women (IGDTUW)</h5>
                 <p className="location-info">Kashmere Gate, New Delhi 110006</p>
                 <p className="location-country">Delhi, India</p>

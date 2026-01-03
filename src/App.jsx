@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Team from "./pages/Team";
+import Events from "./pages/Events";
 import SplashScreen from "./components/SplashScreen";
 import Footer from "./components/Footer";
 import NeonCursor from "./components/NeonCursor";
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/team" element={<Team />} />
+          <Route path="/events" element={<Events />} />
           <Route path="/mentorship" element={<Mentorship />} />
         </Routes>
 
