@@ -1056,6 +1056,11 @@ const handleSplashComplete = () => {
           display: none;
         }
 
+        .team-scroll-container {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+
         .team-cards-wrapper {
           display: flex;
           gap: 2.5rem;

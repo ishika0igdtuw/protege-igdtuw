@@ -92,9 +92,9 @@ const FindMyMentorForm = ({ onClose }) => {
   ];
 
   const programmingLanguages = [
-    { label: 'Python', value: 'python', icon: '🐍' },
-    { label: 'Java', value: 'java', icon: '☕' },
-    { label: 'C++', value: 'cpp', icon: '⚡' }
+    { label: 'Python', value: 'Python', icon: '🐍' },
+    { label: 'Java', value: 'Java', icon: '☕' },
+    { label: 'C++', value: 'C++', icon: '⚡' }
   ];
 
   const goals = [
@@ -182,14 +182,23 @@ const FindMyMentorForm = ({ onClose }) => {
         dsaLevel: formData.dsaLevel === 'beginner' ? 'Beginner' : 
                   formData.dsaLevel === 'intermediate' ? 'Intermediate' : 
                   formData.dsaLevel === 'advanced' ? 'Advanced' : 'Intermediate',
-        preferredLanguage: 'Python', // Default - could be added to form
+        preferredLanguage: formData.programmingLanguage || 'Python',
         interestedTopics: formData.goals.map(goal => {
           // Map goals to DSA topics
-          if (goal === 'internship') return 'Arrays & Strings';
-          if (goal === 'hackathons') return 'Dynamic Programming';
+          if (goal === 'internship-rounds') return 'Arrays & Strings';
+          if (goal === 'placement-rounds') return 'Dynamic Programming';
+          if (goal === 'fundamentals') return 'Arrays & Strings';
+          if (goal === 'competitive') return 'Graphs';
           return 'Arrays & Strings'; // Default
         }),
-        platforms: ['LeetCode'], // Default - could be based on form platform
+        platforms: formData.platform.filter(p => p !== 'other' && p !== 'none').map(p => {
+          // Map platform values to backend enum
+          if (p === 'leetcode') return 'LeetCode';
+          if (p === 'codeforces') return 'Codeforces';
+          if (p === 'codechef') return 'CodeChef';
+          // Skip GFG as it's not in the enum
+          return null;
+        }).filter(p => p !== null),
         goals: formData.mentorReason
       };
 
@@ -311,6 +320,7 @@ const FindMyMentorForm = ({ onClose }) => {
             justify-content: center;
             background: #000;
             z-index: 10000;
+            cursor: default;
           }
           .success-content {
             text-align: center;

@@ -52,11 +52,14 @@ const allocateMentor = async (menteeData) => {
       
       // Check for common platforms (normalize platform names)
       const commonPlatforms = mentor.platforms.some(platform => {
-        const normalizedMentorPlatform = platform.toLowerCase();
-        return menteeData.platforms.some(menteePlatform => 
-          menteePlatform.toLowerCase().includes(normalizedMentorPlatform) ||
-          normalizedMentorPlatform.includes(menteePlatform.toLowerCase())
-        );
+        const normalizedMentorPlatform = platform.toLowerCase().replace('leetcode', 'leetcode');
+        return menteeData.platforms.some(menteePlatform => {
+          const normalizedMenteePlatform = menteePlatform.toLowerCase();
+          return normalizedMentorPlatform === normalizedMenteePlatform ||
+                 (normalizedMentorPlatform === 'leetcode' && normalizedMenteePlatform === 'leetcode') ||
+                 (normalizedMentorPlatform === 'codeforces' && normalizedMenteePlatform === 'codeforces') ||
+                 (normalizedMentorPlatform === 'codechef' && normalizedMenteePlatform === 'codechef');
+        });
       });
       
       return levelMatch && hasSlots && commonPlatforms;
